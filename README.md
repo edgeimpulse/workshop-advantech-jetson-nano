@@ -215,7 +215,62 @@ if __name__=="__main__":
 # example: python3 extract_frames.py --input ../../dataset/dataset.mp4 --output output --frameRate 2 
 ```
 
-Now that we have our individual frames, it is time to go to Edge Impulse Studio and create a project. If you do not have an Edge Impulse account yet, start by creating an account on [Edge Impulse Studio](https://studio.edgeimpulse.com) and create a project.
+Now that we have our individual frames, it is time to go to Edge Impulse Studio and create a project. If you do not have an Edge Impulse account yet, start by creating an account on [Edge Impulse Studio](https://studio.edgeimpulse.com) and create a project by selecting an `Image` project and an `Object Detection` model:
+
+![studio-image-project](assets/studio-image-project.png)
+
+![studio-object-detection-project](assets/studio-object-detection-project.png)
+
+![studio-get-started](assets/studio-get-started.png)
+
+Go to the `Data Acquisition` view while we will upload the frames.
+
+Back on your Jetson Nano, make sure you are still under the `code-samples/extract_frames/` folder and run the following command:
+
+```
+edge-impulse-uploader output/* 
+```
+
+You should see the following output:
+
+```
+Edge Impulse uploader v1.14.0
+? What is your user name or e-mail address (edgeimpulse.com)? louis-demo
+? What is your password? [hidden]
+Endpoints:
+    API:         https://studio.edgeimpulse.com/v1
+    Ingestion:   https://ingestion.edgeimpulse.com
+
+Upload configuration:
+    Label:       Not set, will be infered from file name
+    Category:    training
+
+? To which project do you want to upload the data? Louis (Demo) / Workshop Advan
+tech Sparkfun
+[  1/180] Uploading output/101.jpg OK (1929 ms)
+[  2/180] Uploading output/109.jpg OK (1945 ms)
+[  3/180] Uploading output/116.jpg OK (2551 ms)
+...
+[179/180] Uploading output/90.jpg OK (2706 ms)
+[180/180] Uploading output/93.jpg OK (2335 ms)
+
+Done. Files uploaded successful: 180. Files that failed to upload: 0.
+```
+
+
+
+*Hint: If you have an external camera connected to your Jetson Nano, you can use the following command to connect your Jetson Nano to the studio and collect images directly from your Jetson Nano: `edge-impulse-linux`*
+
+![studio-custom-data-collection](assets/studio-custom-data-collection.png)
+
+Some users reported a permission issue. To bypass it do:
+
+```
+$> whoami
+your-username
+
+$> chown -R your-username:your-username ~/.config
+```
 
 
 ### Create bounding boxes on your images
