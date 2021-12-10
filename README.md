@@ -9,10 +9,10 @@ This tutorial has been designed for the [PERFECTING FACTORY 5.0 WITH EDGE-POWERE
 
 Edge Impulse has been provided two videos by Advantech. **Both videos are real cases for a production line and an operation station in a factory respectively.**:
 
-- Production line video dataset:
+- Production line:
 ![production-line](assets/production-line.png)
 
-- Operation station video dataset: 
+- Operation station: 
 ![protective-equipment-advantech](assets/protective-equipment-advantech.png)
 
 **Objectives:**
@@ -259,7 +259,11 @@ Done. Files uploaded successful: 180. Files that failed to upload: 0.
 
 
 
-*Hint: If you have an external camera connected to your Jetson Nano, you can use the following command to connect your Jetson Nano to the studio and collect images directly from your Jetson Nano: `edge-impulse-linux`*
+*Hint: If you have an external camera connected to your Jetson Nano, you can use the following command to connect your Jetson Nano to the studio and collect images directly from your Jetson Nano:*
+ 
+```
+edge-impulse-linux
+```
 
 ![studio-custom-data-collection](assets/studio-custom-data-collection.png)
 
@@ -275,7 +279,46 @@ $> chown -R your-username:your-username ~/.config
 
 ### Create bounding boxes on your images
 
+We are all set to start creating our bounding boxes around what we want to detect. This is not the fun part!
+
+Go to the `Labelling queue (180)` under the `Data acquisition` view:
+
+![studio-labelling-queue](assets/studio-labelling-queue.png)
+
+And start drawing the bounding boxes around what you want to detect.
+
+As an example, here if we want to avoid bottlenecks on the production line, we can detect **if the working tray is present** and **check attendance by detecting the chair** (we could also check attendance directly by detection if the person is present). If no working tray is present it means that there was an issue before on the production line and if we can detect the chair, then the operator is not present. These are just examples of what you can detect in a constrain environment such as this one:
+
+![studio-draw-bbox](assets/studio-draw-bbox.png)
+
+![studio-draw-bbox-2](assets/studio-draw-bbox-2.png)
+
+Label all your frames and navigate to the next view: `Create Impulse`.
+And because, it is long and boring to do, here is the public project Edge Impulse created for you:
+
+[https://studio.edgeimpulse.com/public/54925/latest](https://studio.edgeimpulse.com/public/54925/latest)
+
+Feel free to clone this project to your account and start exploring!
+![studio-public-project](assets/studio-public-project.png)
 
 ## Train your Machine Learning Model
+
+### Create Impulse
+
+![studio-create-impulse](assets/studio-create-impulse.png)
+
+### Generate Features
+
+![studio-generate-features](assets/studio-generate-features.png)
+
+![studio-generate-features-2](assets/studio-generate-features-2.png)
+
+### Train your model
+
+![studio-train-model](assets/studio-train-model.png)
+
+
+
+
 
 ## Run your inference on the target
