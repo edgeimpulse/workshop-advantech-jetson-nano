@@ -293,7 +293,11 @@ As an example, here if we want to avoid bottlenecks on the production line, we c
 
 ![studio-draw-bbox-2](assets/studio-draw-bbox-2.png)
 
-Label all your frames and navigate to the next view: `Create Impulse`.
+Label all your frames and `Perform a train / test split` under the `Dashboard` view to put away some samples during the training. We will use this dataset to validate our model later:
+
+![studio-perform-train-test-split](assets/studio-perform-train-test-split.png)
+
+Then navigate to the next view: `Create Impulse`.
 And because, it is long and boring to do, here is the public project Edge Impulse created for you:
 
 [https://studio.edgeimpulse.com/public/54925/latest](https://studio.edgeimpulse.com/public/54925/latest)
@@ -302,6 +306,8 @@ Feel free to clone this project to your account and start exploring!
 ![studio-public-project](assets/studio-public-project.png)
 
 ## Train your Machine Learning Model
+
+The following screenshots should be self-explanatory, feel free to watch the live stream or the replay for more details:
 
 ### Create Impulse
 
@@ -318,7 +324,18 @@ Feel free to clone this project to your account and start exploring!
 ![studio-train-model](assets/studio-train-model.png)
 
 
+### Validate your model
 
+![studio-validate-model](assets/studio-validate-model.png)
 
 
 ## Run your inference on the target
+
+
+
+# Additional resources
+
+Here are the two public projects I created, you can have a look at them, clone them and test new things on your side:
+
+- Project 1: [https://studio.edgeimpulse.com/public/54925/latest](https://studio.edgeimpulse.com/public/54925/latest)
+- Project 2: [https://studio.edgeimpulse.com/public/60903/latest](https://studio.edgeimpulse.com/public/60903/latest)
