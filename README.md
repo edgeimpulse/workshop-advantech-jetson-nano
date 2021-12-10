@@ -51,12 +51,13 @@ With such an AI solution, administrators can be informed immediately once unusua
 - An SD Card (recommended 32 GB UHS-1 card according to Nvidia)
 - An ethernet cable
 - An external camera (optional)
-- Depending on how you want to setup your Jetson Nano you'll need either a monitor, keyboard and mouse or a [DC power supply](https://www.sparkfun.com/products/14932):
+- Depending on how you want to setup your Jetson Nano you'll need either:
+	- an extra computer to communicate with the Jetson Nano directly from the host computer 
+	- or a monitor, keyboard and mouse to interact directly with the Jetson Nano.
 
-![additional-hardware](assets/additional-hardware.png)
-*Screenshot from [Getting Started with Jetson Nano Developer Kit](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#setup)*
+Please see [Getting Started with Jetson Nano 2GB Developer Kit](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-2gb-devkit#setup) for more indications.
 
-For this workshop I will use the second option to ease the screen sharing during the screencast.
+For this workshop I will use the first option to ease the screen sharing during the screencast.
 
 
 ## Agenda 
@@ -79,14 +80,39 @@ Make sure to follow this documentation page to setup your Jetson Nano with Edge 
 
 ![setup-hardware-ei-doc](assets/setup-hardware-ei-doc.png)
 
-On the documentation page, go to the `Setting up your Jetson Nano` section and click on the NVIDIA's setup instructions link according to which Jetson Nano you have. You will arrive on Nvidia's getting started page and then download the `Jetson Nano Developer Kit SD Card Image` (about 6.1 GB). Once downloaded, open [Balena Etcher](https://www.balena.io/etcher) to flash the SD card.
+On the documentation page, go to the `Setting up your Jetson Nano` section and click on the NVIDIA's setup instructions link according to which Jetson Nano you have. You will arrive on Nvidia's getting started page and then download the `Jetson Nano Developer Kit SD Card Image` (about 6.1 GB). Once downloaded, open [Balena Etcher](https://www.balena.io/etcher) to flash the SD card (about 10 to 15 min):
+
+![Balena](assets/Balena.png)
+
+Insert your SD card, connect the ethernet cable, connect the Micro-USB port to your computer and connect the USB-C power source:
+
+![jetson-nano-dev-kit-dli-animation_v002_lores](assets/jetson-nano-dev-kit-dli-animation_v002_lores.mp4)
+
+On your primary computer, open a serial console (`PuTTY` on Windows or `screen` on MacOS and Linux), see the full instruction [here](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-2gb-devkit#setup).
+
+Follow the command prompt and once finished, you will be able to log in your Jetson Nano 2GB Developer Kit:
+
+![jetson-welcome-screen](assets/jetson-welcome-screen.png)
+
+All you need to do now is to make sure your device is connected to the internet and run the following command to install Edge Impulse Linux CLI:
+
+```
+wget -q -O - https://cdn.edgeimpulse.com/firmware/linux/jetson.sh | bash
+```
 
 
 ## Prepare your dataset
 
-In most of machine learning projects, collecting data and preparing your dataset is a long and repetitive task. During this workshop, you will be taught how to use a video as the datasource, how to extract sequences of the video and finally how to extract frames from the video sequences.
+In most of machine learning projects, collecting data and preparing your dataset is a long and repetitive task. During this workshop, you will be taught how to use a video as the datasource, how to extract sequences of the video (optional but convenient) and finally how to extract frames from the video sequences.
 
-*The core engineering team is currently working on adding video support directly from the studio but as of December 2021 it is not yet publicly available.*
+*Edge Impulse core engineering team is currently working on adding video support directly from the studio to ease this process but as of December 2021 it is not yet publicly available.*
+
+To obtain an extract of one of the dataset we will be seeing together, download it from here: [dataset](https://edgeimpulse-public.s3.fr-par.scw.cloud/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/dataset.mp4)
+
+
+### Extract frames from a video source
+
+### Create bounding boxes on your images
 
 
 ## Train your Machine Learning Model
