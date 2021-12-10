@@ -1,2 +1,5 @@
 **/output
 dataset/*
+
+# Other
+*.DS_Store
