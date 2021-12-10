@@ -90,6 +90,12 @@ Insert your SD card, connect the ethernet cable, connect the Micro-USB port to y
 
 On your primary computer, open a serial console (`PuTTY` on Windows or `screen` on MacOS and Linux), see the full instruction [here](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-2gb-devkit#setup).
 
+Example on MacOS:
+
+```
+sudo screen /dev/cu.usbmodem14241201137883 115200
+```
+
 Follow the command prompt and once finished, you will be able to log in your Jetson Nano 2GB Developer Kit:
 
 ![jetson-welcome-screen](assets/jetson-welcome-screen.png)
@@ -111,6 +117,106 @@ To obtain an extract of one of the dataset we will be seeing together, download 
 
 
 ### Extract frames from a video source
+
+I created two python script to help you do that. They can be found under this Github repository. 
+
+*The following actions has been tested on the Jetson Nano 2GB Developer Kit. It should also work on your laptop as long as you have python3 installed properly, Edge Impulse CLI installed (you need Node v14 or higher installed) and a few python packages. All the needed dependencies are already installed on the Jetson Nano.*
+
+First clone this repository:
+
+```
+git clone https://github.com/edgeimpulse/workshop-advantech-jetson-nano.git
+```
+
+The structure looks like that:
+
+```
+├── LICENSE
+├── README.md
+├── assets
+├── code_samples
+│   ├── extract_frames
+│   │   └── extract_frames.py
+│   └── split_video
+│       ├── split.py
+│       └── times.txt
+└── dataset
+```
+
+Navigate to the `dataset/` repository and get the video source:
+
+```
+cd dataset/
+```
+```
+wget https://edgeimpulse-public.s3.fr-par.scw.cloud/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/dataset.mp4
+```
+
+We won't be focusing on the split_video script during this workshop but it is present because it can help you to extract a video sequence an exact event if needed.
+
+Now, navigate to the `extract_frames` repository:
+
+```
+cd ../code_samples/extract_frames
+```
+
+and run the following command to execute the script:
+
+```
+python3 extract_frames.py --input ../../dataset/dataset.mp4 --output output --frameRate 1 
+```
+
+*Explanation: The script takes as an input the video dataset, stores in an output folder each frame, taken once every second*
+
+Here is the full script if you want to have a look:
+
+```
+import argparse
+import cv2
+import os
+
+def extractImages(input, output, frameRate):
+    if not os.path.exists(output):
+        os.makedirs(output)
+
+    count=1
+    vidcap = cv2.VideoCapture(input)
+
+    def getFrame(sec):
+        vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000)
+        hasFrames,image = vidcap.read()
+        if hasFrames:
+            cv2.imwrite(output+"/"+str(count)+".jpg", image) # Save frame as JPG file
+        return hasFrames
+
+    sec = 0
+    frameRate = int(frameRate) # Change this number to 1 for each 1 second, 0.5 for 500ms etc...
+    # frameRate = 0.5 # Use this line if you want to take 2 images per second
+        
+    success = getFrame(sec)
+    while success:
+        print ('Read a new frame: ', success, '; at ', sec, 's ; frame number: ', count)
+        count = count + 1
+        sec = sec + frameRate
+        sec = round(sec, 2)
+        success = getFrame(sec)
+        
+
+if __name__=="__main__":
+    print("Extracting Frames from video")
+    a = argparse.ArgumentParser()
+    a.add_argument("--input", help="path to video input")
+    a.add_argument("--output", help="path to images")
+    a.add_argument("--frameRate", help="frame rates, set 1 for 1 image per second, 2 for 1 images every 2 seconds, etc...")
+    args = a.parse_args()
+    print(args)
+    extractImages(args.input, args.output, args.frameRate)
+
+# example: python3 extract_frames.py --input ../../dataset/dataset.mp4 --output output --frameRate 2 
+```
+
+Now that we have our individual frames, it is time to go to Edge Impulse Studio and create a project. If you do not have an Edge Impulse account yet, start by creating an account on [Edge Impulse Studio](https://studio.edgeimpulse.com) and create a project.
+
 
 ### Create bounding boxes on your images
 

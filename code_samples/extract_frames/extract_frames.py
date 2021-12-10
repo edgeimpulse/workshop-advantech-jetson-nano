@@ -39,4 +39,4 @@ if __name__=="__main__":
     print(args)
     extractImages(args.input, args.output, args.frameRate)
 
-# example: python3 extract_frames.py --input ../../dataset/video.mp4 --output output --frameRate 2 
+# example: python3 extract_frames.py --input ../../dataset/dataset.mp4 --output output --frameRate 2 

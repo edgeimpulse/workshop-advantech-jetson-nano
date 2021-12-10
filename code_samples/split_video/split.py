@@ -27,4 +27,4 @@ if __name__=="__main__":
     print(args)
     split(args.input, args.output, args.times)
 
-#exemple: python3 split.py --input ../../dataset/video.mp4 --output output --times times.txt
+#exemple: python3 split.py --input ../../dataset/dataset.mp4 --output output --times times.txt
