@@ -1,5 +1,6 @@
 **/output
 dataset/*
+*__pycache__
 
 # Other
 *.DS_Store
