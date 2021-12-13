@@ -401,6 +401,45 @@ From the same network of your Jetson Nano, open the url provided by your Serial 
 
 ![linux-runner-camera](assets/linux-runner-camera.png)
 
+### Advanced way with Edge Impulse Python SDK
+
+First, install pip3 on your Jetson Nano:
+
+```
+sudo apt-get install python3-pip
+python3 -m pip install --upgrade pip
+```
+
+Install the following dependencies:
+
+```
+sudo apt-get install libatlas-base-dev libportaudio2 libportaudiocpp0 portaudio19-dev
+```
+
+And install `edge_impulse_linux` python3 package using pip:
+
+```
+python3 -m pip install edge_impulse_linux
+```
+
+Download a local version of your model:
+
+```
+edge-impulse-linux-runner --download modelfile.eim
+```
+
+Finally, clone this repository to get the examples:
+
+```
+git clone https://github.com/edgeimpulse/linux-sdk-python
+```
+
+And run the following example to make sure it works:
+
+```
+python3 classify-image.py path-to-modelfile.eim path-to-image.jpg
+```
+
 # Additional resources
 
 Here are the two public projects I created, you can have a look at them, clone them and test new things on your side:
