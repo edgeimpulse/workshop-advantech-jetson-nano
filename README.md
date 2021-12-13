@@ -267,7 +267,8 @@ edge-impulse-linux
 
 ![studio-custom-data-collection](assets/studio-custom-data-collection.png)
 
-Some users reported a permission issue. To bypass it do:
+Some users reported a permission issue leading to the `Failed to start device monitor!` issue. 
+To bypass it do:
 
 ```
 $> whoami
@@ -315,23 +316,90 @@ The following screenshots should be self-explanatory, feel free to watch the liv
 
 ### Generate Features
 
+Generating features is an important step in Embedded Machine Learning. It will create features that are meaningful for the Neural Network to learn on instead of learning directly on the raw data. If you are familiar with Computer Vision, you can also create your custom Processing Block: [Utilize Custom Processing Blocks in Your Image ML Pipelines](https://www.edgeimpulse.com/blog/utilize-custom-processing-blocks-in-your-image-ml-pipelines).
+
+To configure your processing block, click `Images` in the menu on the left. This will show you the raw data on top of the screen (you can select other files via the drop down menu), and the results of the processing step on the right. You can use the options to switch between 'RGB' and 'Grayscale' mode, but for now leave the color depth on 'RGB' and click `Save parameters`.
+
 ![studio-generate-features](assets/studio-generate-features.png)
+
+This will send you to the 'Feature generation' screen. In here you'll:
+
+- Resize all the data.
+- Apply the processing block on all this data.
+- Create a 3D visualization of your complete dataset.
+Click `Generate features` to start the process.
+
+Afterwards the 'Feature explorer' will load. This is a plot of all the data in your dataset. Because images have a lot of dimensions (here: 320x320x3=307,200 features) we run a process called '*dimensionality reduction*' on the dataset before visualizing this. Here the 307,200 features are compressed down to just 3, and then clustered based on similarity. Even though we have little data you can already see the clusters forming.
 
 ![studio-generate-features-2](assets/studio-generate-features-2.png)
 
 ### Train your model
+
+To train the model, we select the Object Detection training block, which fine tunes a pre-trained object detection model on your data. It gives a good performance even with relatively small image datasets. This object detection learning block relies on [MobileNetV2 SSD FPN-Lite 320x320](https://hub.tensorflow.google.cn/tensorflow/ssd_mobilenet_v2/fpnlite_320x320/1).
+
+According to Daniel Situnayake, co-author of the TinyML book and founding tinyML engineer at Edge Impulse, this model “works much better for larger objects — if the object takes up more space in the frame it’s more likely to be correctly classified."
 
 ![studio-train-model](assets/studio-train-model.png)
 
 
 ### Validate your model
 
+To validate your model, navigate to the `Model Testing` view, and click on `Classify all`. It will run the inference on the *Test Dataset* where the images has been kept apart and not used during the training.
+
 ![studio-validate-model](assets/studio-validate-model.png)
+
+If you are happy with the results, we will verify that it also works in real conditions. To do so, we will run the inference of the Jetson Nano.
 
 
 ## Run your inference on the target
 
+### Easy way with Edge Impulse Linux CLI
 
+If you have an external camera plugged to your Jetson Nano, this easiest way to run the inference on your Jetson Nano is surely to use the Edge Impulse Linux CLI:
+
+```
+edge-impulse-linux-runner --clean
+```
+
+```
+Edge Impulse Linux runner v1.3.0
+? What is your user name or e-mail address (edgeimpulse.com)? louis-demo
+? What is your password? [hidden]
+
+? From which project do you want to load the model? Louis Moreau / Advantech - B
+ottleneck on conveyor belt
+[RUN] Downloading model...
+[BLD] Created build job with ID 1830179
+[BLD] Writing templates OK
+[BLD] Scheduling job in cluster...
+[BLD] Job started
+[BLD] Exporting TensorFlow Lite model...
+[BLD] Exporting TensorFlow Lite model OK
+[BLD]
+[BLD] Removing clutter...
+[BLD] Removing clutter OK
+[BLD]
+[BLD] Copying output...
+[BLD] Copying output OK
+[BLD]
+[BLD] Job started
+[BLD] Building binary...
+...
+[RUN] Starting the image classifier for Louis Moreau / Advantech - Bottleneck on conveyor belt (v6)
+[RUN] Parameters image size 320x320 px (3 channels) classes [ 'work-tray' ]
+[RUN] Using camera HD Pro Webcam C920 starting...
+[RUN] Connected to camera
+
+Want to see a feed of the camera and live classification in your browser? Go to http://192.168.1.121:4912
+
+boundingBoxes 253ms. []
+boundingBoxes 224ms. []
+
+```
+
+From the same network of your Jetson Nano, open the url provided by your Serial Monitor (in my case `http://192.168.1.121:4912`) and point your camera to the video feed:
+
+![linux-runner-camera](assets/linux-runner-camera.png)
 
 # Additional resources
 
@@ -339,3 +407,4 @@ Here are the two public projects I created, you can have a look at them, clone t
 
 - Project 1: [https://studio.edgeimpulse.com/public/54925/latest](https://studio.edgeimpulse.com/public/54925/latest)
 - Project 2: [https://studio.edgeimpulse.com/public/60903/latest](https://studio.edgeimpulse.com/public/60903/latest)
+- Blog Post: [Enhancing Health and Safety in Industrial Environments with Embedded Machine Learning](https://www.edgeimpulse.com/blog/enhancing-health-and-safety-in-industrial-environments-with-embedded-machine-learning)
