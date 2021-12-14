@@ -466,6 +466,7 @@ import device_patches       # Device specific patches for Jetson Nano (needs to 
 
 import cv2
 import os
+import time
 import sys, getopt
 import numpy as np
 from edge_impulse_linux.image import ImageImpulseRunner
@@ -512,7 +513,8 @@ def main(argv):
             vidcap = cv2.VideoCapture(args[1])
             sec = 0
             alertBuffer = 0
-            
+            start_time = time.time()
+
             def getFrame(sec):
                 vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000)
                 hasFrames,image = vidcap.read()
@@ -566,7 +568,7 @@ def main(argv):
                     if cv2.waitKey(1) == ord('q'):
                         break
 
-                sec = sec + (res['timing']['dsp'] + res['timing']['classification'])/100
+                sec = time.time() - start_time
                 sec = round(sec, 2)
                 print(sec)
                 img = getFrame(sec)
