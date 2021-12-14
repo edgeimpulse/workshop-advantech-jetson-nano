@@ -140,6 +140,10 @@ The structure looks like that:
 │   └── split_video
 │       ├── split.py
 │       └── times.txt
+│   └── inference
+│       ├── classify-images.py
+│       └── classify-video.py
+│       └── device_patches.py
 └── dataset
 ```
 
@@ -437,8 +441,192 @@ git clone https://github.com/edgeimpulse/linux-sdk-python
 And run the following example to make sure it works:
 
 ```
+cd linux-sdk-python/examples/images/
 python3 classify-image.py path-to-modelfile.eim path-to-image.jpg
 ```
+
+Example on my Jetson Nano:
+
+```
+$> classify-image.py ~/workspace/modelfile.eim ~/workspace/workshop-advantech-jetson-nano/code_samples/extract_frames/output/142.jpg 
+MODEL: /home/luisomoreau/workspace/modelfile.eim
+Loaded runner for "Louis Moreau / Advantech - Bottleneck on conveyor belt"
+Found 1 bounding boxes (243 ms.)
+        work-tray (0.67): x=25 y=100 w=176 h=116
+```
+
+Good it works, now go back to this repository and you will find under the `code-samples/inference` repository the same `classify-image.py` and another one that I slightly modified to accept video inputs and shows alerts on the image and in the console when no bounding boxe has been detected for more than 15 iterations.
+
+Here is the full code if you want to have a look:
+
+```
+#!/usr/bin/env python
+
+import device_patches       # Device specific patches for Jetson Nano (needs to be before importing cv2)
+
+import cv2
+import os
+import sys, getopt
+import numpy as np
+from edge_impulse_linux.image import ImageImpulseRunner
+
+runner = None
+# if you don't want to see a video preview, set this to False
+show_camera = True
+if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
+    show_camera = False
+
+
+def help():
+    print('python classify-video.py <path_to_model.eim> <path_to_video.mp4>')
+
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "h", ["--help"])
+    except getopt.GetoptError:
+        help()
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            help()
+            sys.exit()
+
+    if len(args) != 2:
+        help()
+        sys.exit(2)
+
+    model = args[0]
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    modelfile = os.path.join(dir_path, model)
+
+    print('MODEL: ' + modelfile)
+
+    with ImageImpulseRunner(modelfile) as runner:
+        try:
+            model_info = runner.init()
+            print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
+            labels = model_info['model_parameters']['labels']
+
+            vidcap = cv2.VideoCapture(args[1])
+            sec = 0
+            alertBuffer = 0
+            
+            def getFrame(sec):
+                vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000)
+                hasFrames,image = vidcap.read()
+                if hasFrames:
+                    return image
+
+
+            img = getFrame(sec)
+
+            while img.size != 0:
+            # if img is None:
+            #     print('Failed to load image', args[1])
+            #     exit(1)
+
+                # imread returns images in BGR format, so we need to convert to RGB
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+                # get_features_from_image also takes a crop direction arguments in case you don't have square images
+                features, cropped = runner.get_features_from_image(img)
+
+                # the image will be resized and cropped, save a copy of the picture here
+                # so you can see what's being passed into the classifier
+                cv2.imwrite('debug.jpg', cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
+
+                res = runner.classify(features)
+
+                if "classification" in res["result"].keys():
+                    print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
+                    for label in labels:
+                        score = res['result']['classification'][label]
+                        print('%s: %.2f\t' % (label, score), end='')
+                    print('', flush=True)
+
+                elif "bounding_boxes" in res["result"].keys():
+                    print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
+                    for bb in res["result"]["bounding_boxes"]:
+                        print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
+                        img = cv2.rectangle(cropped, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
+                    if(len(res["result"]["bounding_boxes"]) == 0):
+                        alertBuffer = alertBuffer + 1
+                    else:
+                        alertBuffer = 0
+                    if alertBuffer > 15:
+                        print("ALERT!!!")
+                        cv2.putText(cropped, "ALERT!".format(0.5), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 3)
+                        
+
+
+                if (show_camera):
+                    cv2.imshow('edgeimpulse', cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
+                    if cv2.waitKey(1) == ord('q'):
+                        break
+
+                sec = sec + (res['timing']['dsp'] + res['timing']['classification'])/100
+                sec = round(sec, 2)
+                print(sec)
+                img = getFrame(sec)
+        finally:
+            if (runner):
+                runner.stop()
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
+
+```
+
+Here is the output of this script for the example video. This runs on a Macbook Pro, that explains the fast inference time:
+
+```
+Loaded runner for "Louis Moreau / Advantech - Bottleneck on conveyor belt"
+Found 1 bounding boxes (34 ms.)
+        work-tray (0.78): x=9 y=96 w=159 h=113
+0.34
+Found 1 bounding boxes (25 ms.)
+        work-tray (0.82): x=5 y=87 w=158 h=115
+0.59
+Found 1 bounding boxes (24 ms.)
+        work-tray (0.77): x=0 y=90 w=157 h=114
+0.83
+
+...
+
+131.67
+Found 0 bounding boxes (28 ms.)
+ALERT!!!
+131.95
+Found 0 bounding boxes (26 ms.)
+ALERT!!!
+132.21
+Found 0 bounding boxes (30 ms.)
+ALERT!!!
+132.51
+Found 0 bounding boxes (26 ms.)
+ALERT!!!
+132.77
+Found 0 bounding boxes (26 ms.)
+ALERT!!!
+133.03
+Found 1 bounding boxes (27 ms.)
+        work-tray (0.74): x=6 y=96 w=142 h=107
+133.3
+Found 1 bounding boxes (29 ms.)
+        work-tray (0.72): x=14 y=102 w=154 h=115
+133.59
+Found 1 bounding boxes (29 ms.)
+        work-tray (0.80): x=14 y=102 w=150 h=113
+```
+
+And if you run the script through the GUI and have a monitor, you will be able to see the stream:
+
+![inference-bbox](assets/inference-bbox.png)
+
+![inference-alert](assets/inference-alert.png)
+
 
 # Additional resources
 

@@ -1,6 +1,7 @@
 **/output
 dataset/*
 *__pycache__
+**/debug.jpg
 
 # Other
 *.DS_Store
