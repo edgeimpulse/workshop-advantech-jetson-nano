@@ -9,14 +9,14 @@ import numpy as np
 from edge_impulse_linux.image import ImageImpulseRunner
 
 runner = None
-# if you don't want to see a camera preview, set this to False
+# if you don't want to see a video preview, set this to False
 show_camera = True
 if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     show_camera = False
 
 
 def help():
-    print('python classify-image.py <path_to_model.eim> <path_to_video.mp4>')
+    print('python classify-video.py <path_to_model.eim> <path_to_video.mp4>')
 
 def main(argv):
     try:
@@ -50,6 +50,7 @@ def main(argv):
             vidcap = cv2.VideoCapture(args[1])
             sec = 0
             alertBuffer = 0
+            
             def getFrame(sec):
                 vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000)
                 hasFrames,image = vidcap.read()
