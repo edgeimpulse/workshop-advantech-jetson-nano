@@ -20,7 +20,7 @@ Edge Impulse has been provided two videos by Advantech. **Both videos are real c
 Advantech wants to provide an efficient way to manage operation time and productivity calculation in manufacturing assembly. At the current state, there is an administrator looking around to make sure normal productivity:
 
 - **Use case 1:**
-For the first use case, the goal is to improve productivity and make human resources more effective through this AI solution for smart factory management.
+For the first use case, the goal is to improve productivity and make human resources more effectively through this AI solution for smart factory management.
 Administrators can be informed immediately once productivity has something wrong (bottleneck, operator not present, etc...) even though administrators are not at the scene.
 
 ![advantech-manufacturing-image](assets/advantech-manufacturing-image.jpeg)
@@ -51,13 +51,13 @@ With such an AI solution, administrators can be informed immediately once unusua
 - An SD Card (recommended 32 GB UHS-1 card according to Nvidia)
 - An ethernet cable
 - An external camera (optional)
-- Depending on how you want to setup your Jetson Nano you'll need either:
+- Depending on how you want to set up your Jetson Nano you'll need either:
 	- an extra computer to communicate with the Jetson Nano directly from the host computer 
 	- or a monitor, keyboard and mouse to interact directly with the Jetson Nano.
 
 Please see [Getting Started with Jetson Nano 2GB Developer Kit](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-2gb-devkit#setup) for more indications.
 
-For this workshop I will use the first option to ease the screen sharing during the screencast.
+For this workshop, I will use the first option to ease the screen sharing during the screencast.
 
 
 ## Agenda 
@@ -74,13 +74,13 @@ Although this step should have been done before the workshop, we'll go through i
 
 *Note that this step can take up to one hour depending on your internet speed.*
 
-Make sure to follow this documentation page to setup your Jetson Nano with Edge Impulse:
+Make sure to follow this documentation page to set up your Jetson Nano with Edge Impulse:
 
 [https://docs.edgeimpulse.com/docs/nvidia-jetson-nano](https://docs.edgeimpulse.com/docs/nvidia-jetson-nano)
 
 ![setup-hardware-ei-doc](assets/setup-hardware-ei-doc.png)
 
-On the documentation page, go to the `Setting up your Jetson Nano` section and click on the NVIDIA's setup instructions link according to which Jetson Nano you have. You will arrive on Nvidia's getting started page and then download the `Jetson Nano Developer Kit SD Card Image` (about 6.1 GB). Once downloaded, open [Balena Etcher](https://www.balena.io/etcher) to flash the SD card (about 10 to 15 min):
+On the documentation page, go to the `Setting up your Jetson Nano` section and click on NVIDIA's setup instructions link according to which Jetson Nano you have. You will arrive on Nvidia's getting started page and then download the `Jetson Nano Developer Kit SD Card Image` (about 6.1 GB). Once downloaded, open [Balena Etcher](https://www.balena.io/etcher) to flash the SD card (about 10 to 15 min):
 
 ![Balena](assets/Balena.png)
 
@@ -88,7 +88,7 @@ Insert your SD card, connect the ethernet cable, connect the Micro-USB port to y
 
 ![jetson-nano-dev-kit-dli-animation_v002_lores](assets/jetson-nano-dev-kit-dli-animation_v002_lores.mp4)
 
-On your primary computer, open a serial console (`PuTTY` on Windows or `screen` on MacOS and Linux), see the full instruction [here](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-2gb-devkit#setup).
+On your primary computer, open a serial console (`PuTTY` on Windows or `screen` on macOS and Linux), see the full instruction [here](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-2gb-devkit#setup).
 
 Example on MacOS:
 
@@ -96,7 +96,7 @@ Example on MacOS:
 sudo screen /dev/cu.usbmodem14241201137883 115200
 ```
 
-Follow the command prompt and once finished, you will be able to log in your Jetson Nano 2GB Developer Kit:
+Follow the command prompt and once finished, you will be able to log in to your Jetson Nano 2GB Developer Kit:
 
 ![jetson-welcome-screen](assets/jetson-welcome-screen.png)
 
@@ -109,18 +109,18 @@ wget -q -O - https://cdn.edgeimpulse.com/firmware/linux/jetson.sh | bash
 
 ## Prepare your dataset
 
-In most of machine learning projects, collecting data and preparing your dataset is a long and repetitive task. During this workshop, you will be taught how to use a video as the datasource, how to extract sequences of the video (optional but convenient) and finally how to extract frames from the video sequences.
+In most machine learning projects, collecting data and preparing your dataset is a long and repetitive task. During this workshop, you will be taught how to use a video as the data source, how to extract sequences of the video (optional but convenient) and finally how to extract frames from the video sequences.
 
-*Edge Impulse core engineering team is currently working on adding video support directly from the studio to ease this process but as of December 2021 it is not yet publicly available.*
+*Edge Impulse core engineering team is currently working on adding video support directly from the studio to ease this process but as of December 2021, it is not yet publicly available.*
 
-To obtain an extract of one of the dataset we will be seeing together, download it from here: [dataset](https://edgeimpulse-public.s3.fr-par.scw.cloud/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/dataset.mp4)
+To obtain an extract of one of the datasets we will be seeing together, download it from here: [dataset](https://edgeimpulse-public.s3.fr-par.scw.cloud/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/dataset.mp4)
 
 
 ### Extract frames from a video source
 
-I created two python script to help you do that. They can be found under this Github repository. 
+I created two python scripts to help you do that. They can be found under this Github repository. 
 
-*The following actions has been tested on the Jetson Nano 2GB Developer Kit. It should also work on your laptop as long as you have python3 installed properly, Edge Impulse CLI installed (you need Node v14 or higher installed) and a few python packages. All the needed dependencies are already installed on the Jetson Nano.*
+*The following actions have been tested on the Jetson Nano 2GB Developer Kit. It should also work on your laptop as long as you have python3 installed properly, Edge Impulse CLI installed (you need Node v14 or higher installed) and a few python packages. All the needed dependencies are already installed on the Jetson Nano.*
 
 First clone this repository:
 
@@ -156,7 +156,7 @@ cd dataset/
 wget https://edgeimpulse-public.s3.fr-par.scw.cloud/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/Advantech-Workshop/dataset.mp4
 ```
 
-We won't be focusing on the split_video script during this workshop but it is present because it can help you to extract a video sequence an exact event if needed.
+We won't be focusing on the split_video script during this workshop but it is present because it can help you to extract a video sequence of an exact event if needed.
 
 Now, navigate to the `extract_frames` repository:
 
@@ -246,7 +246,7 @@ Endpoints:
     Ingestion:   https://ingestion.edgeimpulse.com
 
 Upload configuration:
-    Label:       Not set, will be infered from file name
+    Label:       Not set, will be inferred from the filename
     Category:    training
 
 ? To which project do you want to upload the data? Louis (Demo) / Workshop Advan
@@ -292,13 +292,13 @@ Go to the `Labelling queue (180)` under the `Data acquisition` view:
 
 And start drawing the bounding boxes around what you want to detect.
 
-As an example, here if we want to avoid bottlenecks on the production line, we can detect **if the working tray is present** and **check attendance by detecting the chair** (we could also check attendance directly by detection if the person is present). If no working tray is present it means that there was an issue before on the production line and if we can detect the chair, then the operator is not present. These are just examples of what you can detect in a constrain environment such as this one:
+As an example, here if we want to avoid bottlenecks on the production line, we can detect **if the working tray is present** and **check attendance by detecting the chair** (we could also check attendance directly by detection if the person is present). If no working tray is present it means that there was an issue before on the production line and if we can detect the chair, then the operator is not present. These are just examples of what you can detect in a constrained environment such as this one:
 
 ![studio-draw-bbox](assets/studio-draw-bbox.png)
 
 ![studio-draw-bbox-2](assets/studio-draw-bbox-2.png)
 
-Label all your frames and `Perform a train / test split` under the `Dashboard` view to put away some samples during the training. We will use this dataset to validate our model later:
+Label all your frames and `Perform a train/test split` under the `Dashboard` view to put away some samples during the training. We will use this dataset to validate our model later:
 
 ![studio-perform-train-test-split](assets/studio-perform-train-test-split.png)
 
@@ -322,7 +322,7 @@ The following screenshots should be self-explanatory, feel free to watch the liv
 
 Generating features is an important step in Embedded Machine Learning. It will create features that are meaningful for the Neural Network to learn on instead of learning directly on the raw data. If you are familiar with Computer Vision, you can also create your custom Processing Block: [Utilize Custom Processing Blocks in Your Image ML Pipelines](https://www.edgeimpulse.com/blog/utilize-custom-processing-blocks-in-your-image-ml-pipelines).
 
-To configure your processing block, click `Images` in the menu on the left. This will show you the raw data on top of the screen (you can select other files via the drop down menu), and the results of the processing step on the right. You can use the options to switch between 'RGB' and 'Grayscale' mode, but for now leave the color depth on 'RGB' and click `Save parameters`.
+To configure your processing block, click `Images` in the menu on the left. This will show you the raw data on top of the screen (you can select other files via the drop-down menu), and the results of the processing step on the right. You can use the options to switch between 'RGB' and 'Grayscale' mode, but for now, leave the colour depth on 'RGB' and click `Save parameters`.
 
 ![studio-generate-features](assets/studio-generate-features.png)
 
@@ -339,7 +339,7 @@ Afterwards the 'Feature explorer' will load. This is a plot of all the data in y
 
 ### Train your model
 
-To train the model, we select the Object Detection training block, which fine tunes a pre-trained object detection model on your data. It gives a good performance even with relatively small image datasets. This object detection learning block relies on [MobileNetV2 SSD FPN-Lite 320x320](https://hub.tensorflow.google.cn/tensorflow/ssd_mobilenet_v2/fpnlite_320x320/1).
+To train the model, we select the Object Detection training block, which fine-tunes a pre-trained object detection model on your data. It gives good performance even with relatively small image datasets. This object detection learning block relies on [MobileNetV2 SSD FPN-Lite 320x320](https://hub.tensorflow.google.cn/tensorflow/ssd_mobilenet_v2/fpnlite_320x320/1).
 
 According to Daniel Situnayake, co-author of the TinyML book and founding tinyML engineer at Edge Impulse, this model “works much better for larger objects — if the object takes up more space in the frame it’s more likely to be correctly classified."
 
@@ -348,7 +348,7 @@ According to Daniel Situnayake, co-author of the TinyML book and founding tinyML
 
 ### Validate your model
 
-To validate your model, navigate to the `Model Testing` view, and click on `Classify all`. It will run the inference on the *Test Dataset* where the images has been kept apart and not used during the training.
+To validate your model, navigate to the `Model Testing` view, and click on `Classify all`. It will run the inference on the *Test Dataset* where the images have been kept apart and not used during the training.
 
 ![studio-validate-model](assets/studio-validate-model.png)
 
@@ -359,7 +359,7 @@ If you are happy with the results, we will verify that it also works in real con
 
 ### Easy way with Edge Impulse Linux CLI
 
-If you have an external camera plugged to your Jetson Nano, this easiest way to run the inference on your Jetson Nano is surely to use the Edge Impulse Linux CLI:
+If you have an external camera plugged into your Jetson Nano, this easiest way to run the inference on your Jetson Nano is surely to use the Edge Impulse Linux CLI:
 
 ```
 edge-impulse-linux-runner --clean
@@ -401,7 +401,7 @@ boundingBoxes 224ms. []
 
 ```
 
-From the same network of your Jetson Nano, open the url provided by your Serial Monitor (in my case `http://192.168.1.121:4912`) and point your camera to the video feed:
+From the same network of your Jetson Nano, open the URL provided by your Serial Monitor (in my case `http://192.168.1.121:4912`) and point your camera to the video feed:
 
 ![linux-runner-camera](assets/linux-runner-camera.png)
 
@@ -455,7 +455,7 @@ Found 1 bounding boxes (243 ms.)
         work-tray (0.67): x=25 y=100 w=176 h=116
 ```
 
-Good it works, now go back to this repository and you will find under the `code-samples/inference` repository the same `classify-image.py` and another one that I slightly modified to accept video inputs and shows alerts on the image and in the console when no bounding boxe has been detected for more than 15 iterations.
+Good, it works, now go back to this repository and you will find under the `code-samples/inference` repository the same `classify-image.py` and another one that I slightly modified to accept video inputs and shows alerts on the image and in the console when no bounding box has been detected for more than 15 iterations.
 
 Here is the full code if you want to have a look:
 
@@ -581,7 +581,7 @@ if __name__ == "__main__":
 
 ```
 
-Here is the output of this script for the example video. This runs on a Macbook Pro, that explains the fast inference time:
+Here is the output of this script for the example video. This runs on a Macbook Pro, which explains the fast inference time:
 
 ```
 Loaded runner for "Louis Moreau / Advantech - Bottleneck on conveyor belt"
